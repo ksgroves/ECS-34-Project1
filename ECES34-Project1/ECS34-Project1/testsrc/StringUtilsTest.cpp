@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>
+#include "StringUtils.h"
 //returns the string in between the given start and end, 0 is first entry
 //negatives begin at the end of string
 TEST(StringUtilsTest, SliceTest){
@@ -86,7 +88,8 @@ TEST(StringUtilsTest, Replace){
     EXPECT_EQ(StringUtils::Replace("hello", "x", "y"), "hello");
     EXPECT_EQ(StringUtils::Replace("ababab", "ab", "cd"), "cdcdcd");
 }
-
+// for join and split, should return test vector that either is
+// split into multiple strings or concatenated into one
 TEST(StringUtilsTest, Split){
     std::vector<std::string> test1 = {"hello", "world"};
     EXPECT_EQ(StringUtils::Split("hello world"), test1);
@@ -114,14 +117,15 @@ TEST(StringUtilsTest, Join){
     std::vector<std::string> test4 = {"one"};
     EXPECT_EQ(StringUtils::Join("-", test4), "one");
 }
-
+// tabs should be expanded to given number of spaces based on tab size
 TEST(StringUtilsTest, ExpandTabs){
     EXPECT_EQ(StringUtils::ExpandTabs("a\tb", 4), "a   b");
     EXPECT_EQ(StringUtils::ExpandTabs("ab\tc", 4), "ab  c");
     EXPECT_EQ(StringUtils::ExpandTabs("\t", 4), "    ");
     EXPECT_EQ(StringUtils::ExpandTabs("a\t\tb", 4), "a       b");
 }
-
+// should calculate edit distance between two given strings
+// option to ignore differences in case
 TEST(StringUtilsTest, EditDistance){
     EXPECT_EQ(StringUtils::EditDistance("kitten", "sitting"), 3);
     EXPECT_EQ(StringUtils::EditDistance("flaw", "lawn"), 2);
