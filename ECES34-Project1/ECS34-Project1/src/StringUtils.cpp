@@ -21,13 +21,19 @@ std::string Capitalize(const std::string &str) noexcept{
 }
 
 std::string Upper(const std::string &str) noexcept{
-    // Replace code here
-    return "";
+    std::string result = str;
+    for(char &c : result){
+        c = std::toupper(c);
+    }
+    return result;
 }
 
 std::string Lower(const std::string &str) noexcept{
-    // Replace code here
-    return "";
+    std::string result = str;
+    for(char &c : result){
+        c = std::tolower(c);
+    }
+    return result;
 }
 
 std::string LStrip(const std::string &str) noexcept{
