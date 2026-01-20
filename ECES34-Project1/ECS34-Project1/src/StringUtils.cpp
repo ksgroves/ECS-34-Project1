@@ -1,3 +1,6 @@
+#include "StringUtils.h"
+#include <cctype>
+
 namespace StringUtils{
 // ifs handle negatives and zeroes as inputs
 // otherwise just returns the substring from start to end
@@ -213,10 +216,37 @@ std::string ExpandTabs(const std::string &str, int tabsize) noexcept{
     }
     return result;
 }
-
+// should calculate edit distance with dynamic programming
+// creates a 2d array to store distances
+// first rows and columsn filled with indexes
+// then positions filled based on pev values
+// takes minimum of three possible edits
 int EditDistance(const std::string &left, const std::string &right, bool ignorecase) noexcept{
-    // Replace code here
-    return 0;
+    size_t m = left.length();
+    size_t n = right.length();
+
+    std::vector<std::vector<int>> dp(m + 1, std::vector<int>(n + 1, 0));
+
+    for(size_t i = 0; i <= m; i++) dp[i][0] = i;
+    for(size_t j = 0; j <= n; j++) dp[0][j] = j;
+
+    for(size_t i = 1; i <= m; i++){
+        char lc = left[i-1];
+        if(ignorecase) lc = static_cast<char>(std::tolower(static_cast<unsigned char>(lc)));
+
+        for(size_t j = 1; j <= n; j++){
+            char rc = right[j-1];
+            if(ignorecase) rc = static_cast<char>(std::tolower(static_cast<unsigned char>(rc)));
+
+            if(lc == rc){
+                dp[i][j] = dp[i-1][j-1]; // no edit
+            }
+            else{
+                dp[i][j] = 1 + std::min(dp[i-1][j-1], std::min(dp[i][j-1], dp[i-1][j]));
+            }
+        }
+    }
+    return dp[m][n];
 }
 
 };
