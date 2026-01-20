@@ -71,14 +71,23 @@ std::string Center(const std::string &str, int width, char fill) noexcept{
     return "";
 }
 
+//fill space is appended in LJust and inserted at 0 in RJust
 std::string LJust(const std::string &str, int width, char fill) noexcept{
-    // Replace code here
-    return "";
+    if(str.length() >= width){
+        return str;
+    }
+    std::string result = str;
+    result.append(width - str.length(), fill);
+    return result;
 }
 
 std::string RJust(const std::string &str, int width, char fill) noexcept{
-    // Replace code here
-    return "";
+    if(str.length() >= width){
+        return str;
+    }
+    std::string result = str;
+    result.insert(0, width - str.length(), fill);
+    return result;
 }
 
 std::string Replace(const std::string &str, const std::string &old, const std::string &rep) noexcept{
