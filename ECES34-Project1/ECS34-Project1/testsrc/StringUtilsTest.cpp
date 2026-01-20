@@ -1,5 +1,3 @@
-#include <gtest/gtest.h>
-#include "StringUtils.h"
 //returns the string in between the given start and end, 0 is first entry
 //negatives begin at the end of string
 TEST(StringUtilsTest, SliceTest){
@@ -20,14 +18,14 @@ TEST(StringUtilsTest, Capitalize){
 }
 // all lowercase input sould result in uppercase output
 TEST(StringUtilsTest, Upper){
-    EXPECT_EQ(StringUtils::Upper(""), "h");
+    EXPECT_EQ(StringUtils::Upper(""), "");
     EXPECT_EQ(StringUtils::Upper("hello"), "HELLO");
     EXPECT_EQ(StringUtils::Upper("Hello World!"), "HELLO WORLD!");
     EXPECT_EQ(StringUtils::Upper("123abc"), "123ABC");
 }
 // all uppercase input sould result in lowercase output
 TEST(StringUtilsTest, Lower){
-    EXPECT_EQ(StringUtils::Lower(""), "h");
+    EXPECT_EQ(StringUtils::Lower(""), "");
     EXPECT_EQ(StringUtils::Lower("HELLO"), "hello");
     EXPECT_EQ(StringUtils::Lower("Hello World!"), "hello world!");
     EXPECT_EQ(StringUtils::Lower("123ABC"), "123abc");
@@ -90,17 +88,45 @@ TEST(StringUtilsTest, Replace){
 }
 
 TEST(StringUtilsTest, Split){
-    
+    std::vector<std::string> test1 = {"hello", "world"};
+    EXPECT_EQ(StringUtils::Split("hello world"), test1);
+
+    std::vector<std::string> test2 = {"a", "b", "c"};
+    EXPECT_EQ(StringUtils::Split("a,b,c", ","), test2);
+
+    std::vector<std::string> test3 = {"hello", "world"};
+    EXPECT_EQ(StringUtils::Split("   hello   world   "), test3);
+
+    std::vector<std::string> test4 = {"one"};
+    EXPECT_EQ(StringUtils::Split("one"), test4);
 }
 
 TEST(StringUtilsTest, Join){
-    
+    std::vector<std::string> test1 = {"hello", "world"};
+    EXPECT_EQ(StringUtils::Join(" ", test1), "hello world");
+
+    std::vector<std::string> test2 = {"a", "b", "c"};
+    EXPECT_EQ(StringUtils::Join(",", test2), "a,b,c");
+
+    std::vector<std::string> test3 = {};
+    EXPECT_EQ(StringUtils::Join(",", test3), "");
+
+    std::vector<std::string> test4 = {"one"};
+    EXPECT_EQ(StringUtils::Join("-", test4), "one");
 }
 
 TEST(StringUtilsTest, ExpandTabs){
-    
+    EXPECT_EQ(StringUtils::ExpandTabs("a\tb", 4), "a   b");
+    EXPECT_EQ(StringUtils::ExpandTabs("ab\tc", 4), "ab  c");
+    EXPECT_EQ(StringUtils::ExpandTabs("\t", 4), "    ");
+    EXPECT_EQ(StringUtils::ExpandTabs("a\t\tb", 4), "a       b");
 }
 
 TEST(StringUtilsTest, EditDistance){
-    
+    EXPECT_EQ(StringUtils::EditDistance("kitten", "sitting"), 3);
+    EXPECT_EQ(StringUtils::EditDistance("flaw", "lawn"), 2);
+    EXPECT_EQ(StringUtils::EditDistance("", "test"), 4);
+    EXPECT_EQ(StringUtils::EditDistance("test", ""), 4);
+    EXPECT_EQ(StringUtils::EditDistance("test", "test"), 0);
+    EXPECT_EQ(StringUtils::EditDistance("Test", "test", true), 0);
 }
