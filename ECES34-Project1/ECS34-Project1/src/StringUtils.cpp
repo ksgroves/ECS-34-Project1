@@ -7,9 +7,10 @@ std::string Slice(const std::string &str, ssize_t start, ssize_t end) noexcept{
     // Replace code here
     return "";
 }
-
+//capitalize is template from discussion
+//takes first chacter and makes upper, 
+//and makes rest lower for all index >0
 std::string Capitalize(const std::string &str) noexcept{
-    // Replace code here
     std::string Temp = str;
     if(!Temp.empty()){
         Temp[0] = toupper(Temp[0]);
@@ -35,7 +36,9 @@ std::string Lower(const std::string &str) noexcept{
     }
     return result;
 }
-
+//strips are template from discussion
+//increments an index for each space at beginning of string
+//returns remaining substring from final index
 std::string LStrip(const std::string &str) noexcept{
     std::string Temp = str;
     size_t Index = 0;
@@ -46,7 +49,7 @@ std::string LStrip(const std::string &str) noexcept{
 
     return Temp.substr(Index);
 }
-
+//same as LStrip but deincrements from end
 std::string RStrip(const std::string &str) noexcept{
     std::string Temp = str;
     if(!Temp.empty()){
@@ -61,16 +64,23 @@ std::string RStrip(const std::string &str) noexcept{
     }
     return "";
 }
-
+//runs both strips, gives expected result
 std::string Strip(const std::string &str) noexcept{
     return LStrip(RStrip(str));
 }
-
+//combine LJust and RJust, do both while dividing the total padding
 std::string Center(const std::string &str, int width, char fill) noexcept{
-    // Replace code here
-    return "";
+    if(str.length() >= width){
+        return str;
+    }
+    int pad = width - str.length();
+    int leftpad = pad/2;
+    int rightpad = pad - leftpad;
+    std::string result = str;
+    result.insert(0, leftpad, fill);
+    result.append(rightpad, fill);
+    return result;
 }
-
 //fill space is appended in LJust and inserted at 0 in RJust
 std::string LJust(const std::string &str, int width, char fill) noexcept{
     if(str.length() >= width){
@@ -89,10 +99,26 @@ std::string RJust(const std::string &str, int width, char fill) noexcept{
     result.insert(0, width - str.length(), fill);
     return result;
 }
-
+// go through each position in str to find instances of old
+// the append rep to result and increment by the number of spaces old occupied
+// otherwise append the current character to result and increment
 std::string Replace(const std::string &str, const std::string &old, const std::string &rep) noexcept{
-    // Replace code here
-    return "";
+    if (old == "") {
+        return str;
+    }
+    std::string result;
+    size_t pos = 0;
+    while(pos < str.length()){
+        if(str.compare(pos, old.length(), old) == 0){
+            result += rep;
+            pos += old.length();
+        }
+        else{
+            result += str[pos];
+            pos++;
+        }
+    }
+    return result;
 }
 
 std::vector< std::string > Split(const std::string &str, const std::string &splt) noexcept{
