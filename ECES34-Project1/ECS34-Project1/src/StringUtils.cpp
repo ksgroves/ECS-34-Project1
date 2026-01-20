@@ -1,11 +1,24 @@
-#include "StringUtils.h"
-#include <cctype>
-
 namespace StringUtils{
-
+// ifs handle negatives and zeroes as inputs
+// otherwise just returns the substring from start to end
 std::string Slice(const std::string &str, ssize_t start, ssize_t end) noexcept{
-    // Replace code here
-    return "";
+    ssize_t len = str.length();
+    if(start < 0){
+        start += len;
+    }
+    if(end == 0){
+        end = len;
+    }
+    if(end < 0){
+        end += len;
+    }
+    if(start < 0){
+        start = 0;
+    }
+    if (start >= end){
+        return "";
+    }
+    return str.substr(start, (end - start));
 }
 //capitalize is template from discussion
 //takes first chacter and makes upper, 
@@ -120,20 +133,85 @@ std::string Replace(const std::string &str, const std::string &old, const std::s
     }
     return result;
 }
-
+// two cases, either white space or given splitter
+// ignore leading and trailing space, treat multiple as one
+// for given splitter find each instance divide by them
 std::vector< std::string > Split(const std::string &str, const std::string &splt) noexcept{
-    // Replace code here
-    return {};
-}
+    std::vector< std::string > result;
+    if(splt == ""){
+        size_t i = 0;
+        size_t n = str.length();
 
+        while(i < n){
+            while(i < n && std::isspace(static_cast<unsigned char>(str[i]))){
+                i++;
+            }
+
+            if(i >= n){
+                break;
+            }
+
+            size_t start = i;
+            while(i < n && !std::isspace(static_cast<unsigned char>(str[i]))){
+                i++;
+            }
+
+            result.push_back(str.substr(start, i - start));
+        }
+        return result;
+    }
+    size_t pos = 0;
+    size_t spltterlen = splt.length();
+
+    while(true){
+        size_t found = str.find(splt, pos);
+
+        if(found == std::string::npos){
+            result.push_back(str.substr(pos));
+            break;
+        }
+
+        result.push_back(str.substr(pos, found - pos));
+        pos = found + spltterlen;
+    }
+    return result;
+}
+// appends each string in vector to result with seperator in between
 std::string Join(const std::string &str, const std::vector< std::string > &vect) noexcept{
-    // Replace code here
-    return "";
+    if(vect.empty()){
+        return "";
+    }
+    std::string result = vect[0];
+    for(size_t i = 1; i < vect.size(); i++){
+        result += str;
+        result += vect[i];
+    }
+    return result;
 }
-
+// get column position, when encountering tab
+//calculate spaces to next tab stop and append that many spaces
+// newline rests column count
 std::string ExpandTabs(const std::string &str, int tabsize) noexcept{
-    // Replace code here
-    return "";
+    std::string result;
+    int col = 0;
+
+    for(char c : str){
+        if(c == '\t'){
+            int spaces = tabsize - (col % tabsize);
+            result.append(spaces, ' ');
+            col += spaces;
+        }
+        else{
+            result += c;
+            if(c == '\n' || c == '\r'){
+                col = 0;
+            }
+            else{
+                col++;
+            }
+        }
+    }
+    return result;
 }
 
 int EditDistance(const std::string &left, const std::string &right, bool ignorecase) noexcept{
